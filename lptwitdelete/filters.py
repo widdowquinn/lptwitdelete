@@ -56,7 +56,7 @@ def date_after(tweet: dict, date: datetime):
     :param date:  if the tweet was posted after this date it should be considered for deletion
     """
     tweet_date = datetime.strptime(tweet["created_at"], "%a %b %d %X %z %Y")
-    if tweet_date > date:
+    if tweet_date >= date:
         return True
     return False
 
@@ -68,7 +68,7 @@ def date_before(tweet: dict, date: datetime):
     :param date:  if the tweet was posted before this date it should be considered for deletion
     """
     tweet_date = datetime.strptime(tweet["created_at"], "%a %b %d %X %z %Y")
-    if tweet_date < date:
+    if tweet_date <= date:
         return True
     return False
 

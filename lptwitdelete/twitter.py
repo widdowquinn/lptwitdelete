@@ -21,6 +21,7 @@ def delete_tweets(api: tweepy.API, tweets: List):
     :param tweets:  iterable of tweets for deletion
     """
     logger = logging.getLogger(__name__)
+    logger.info("Deleting (filtered) tweets from timeline...")
 
     delete_tqdm = tqdm(tweets)
     skipped = []

@@ -50,6 +50,7 @@ def main(argv: Optional[List[str]] = None):
         try:
             with args.outfile.open("w") as ofh:
                 json.dump(tweets, ofh)
+            logger.info("Wrote %d tweets to %s", len(tweets), args.outfile)
         except IOError:
             logger.error("Could not write filtered tweets to %s (exiting)", args.outfile)
             raise SystemError(1)
