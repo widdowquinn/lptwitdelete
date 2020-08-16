@@ -1,0 +1,9 @@
+# Auxiliary Python files
+*.pyc
+*/__pycache__/
+
+# VSCode
+.vscode/
+
+# Distribution files
+*.egg-info/
