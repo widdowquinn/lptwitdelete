@@ -1,0 +1,11 @@
+bandit
+black
+coverage
+doc8
+flake8
+mypy
+pydocstyle
+pylint
+pytest
+pytest-cov
+sphinx
