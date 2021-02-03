@@ -3,6 +3,7 @@
 
 import json
 import logging
+import sys
 import time
 
 from typing import List, Optional
@@ -40,7 +41,11 @@ def main(argv: Optional[List[str]] = None):
     # terms is performed in the load_filter_archive() call
     # If an archive file is not supplied, we attempt to use the Twitter API
     if args.archpath:
-        tweets = load_filter_archive(args)
+        try:
+            tweets = load_filter_archive(args)
+        except FileNotFoundError:
+            logger.error(f"Archive file {args.archpath} cannot be found (exiting)")
+            sys.exit(1)
     else:
         tweets = filter_twitter(api, args)
     logger.info("Filtered archive contains %s tweets for deletion", len(tweets))
@@ -52,7 +57,9 @@ def main(argv: Optional[List[str]] = None):
                 json.dump(tweets, ofh)
             logger.info("Wrote %d tweets to %s", len(tweets), args.outfile)
         except IOError:
-            logger.error("Could not write filtered tweets to %s (exiting)", args.outfile)
+            logger.error(
+                "Could not write filtered tweets to %s (exiting)", args.outfile
+            )
             raise SystemError(1)
 
     # Delete tweets in filtered set
