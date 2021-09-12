@@ -140,7 +140,7 @@ Unless otherwise indicated, all code is subject to the following agreement:
 ```text
 The MIT License
 
-Copyright (c) 2020 Leighton Pritchard
+Copyright (c) 2020-2021 Leighton Pritchard
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

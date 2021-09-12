@@ -27,13 +27,15 @@ def delete_tweets(api: tweepy.API, tweets: List):
     skipped = []
     for tweet in delete_tqdm:
         try:
-            delete_tqdm.set_description(tweet["id_str"])
-            api.destroy_status(tweet["id_str"])
+            delete_tqdm.set_description(tweet["tweet"]["id_str"])
+            api.destroy_status(tweet["tweet"]["id_str"])
         except tweepy.TweepError:
             skipped.append(tweet)
 
     if len(skipped):
-        logger.warning("Skipped tweets:\n\t%s", "\n\t".join([_["id_str"] for _ in skipped]))
+        logger.warning(
+            "Skipped tweets:\n\t%s", "\n\t".join([_["id_str"] for _ in skipped])
+        )
 
 
 def filter_twitter(api: tweepy.API, args: Namespace):
@@ -45,7 +47,9 @@ def filter_twitter(api: tweepy.API, args: Namespace):
     logger = logging.getLogger(__name__)
 
     # Iterate through tweets via API
-    logger.info("Processing Twitter statuses for %s via web API...", api.me().screen_name)
+    logger.info(
+        "Processing Twitter statuses for %s via web API...", api.me().screen_name
+    )
     tweets = [_._json for _ in tqdm(tweepy.Cursor(api.user_timeline).items())]
 
     return filter_tweets(tweets, args)

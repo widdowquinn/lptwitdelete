@@ -22,7 +22,11 @@ def filter_tweets(tweets: Iterable, args: Namespace) -> List[dict]:
         try:
             sdate = datetime.strptime(args.start_date, "%Y-%m-%d").astimezone()
         except ValueError:
-            logger.error("Could not parse start date %s (exiting)", args.start_date, exc_info=True)
+            logger.error(
+                "Could not parse start date %s (exiting)",
+                args.start_date,
+                exc_info=True,
+            )
             raise SystemError(1)
         tweets = filter(lambda tweet: date_after(tweet, sdate), tweets)
 
@@ -32,7 +36,9 @@ def filter_tweets(tweets: Iterable, args: Namespace) -> List[dict]:
         try:
             edate = datetime.strptime(args.end_date, "%Y-%m-%d").astimezone()
         except ValueError:
-            logger.error("Could not parse end date %s (exiting)", args.end_date, exc_info=True)
+            logger.error(
+                "Could not parse end date %s (exiting)", args.end_date, exc_info=True
+            )
             raise SystemError(1)
         tweets = filter(lambda tweet: date_before(tweet, edate), tweets)
 
@@ -55,7 +61,16 @@ def date_after(tweet: dict, date: datetime):
     :param tweet:  JSON dict for tweet
     :param date:  if the tweet was posted after this date it should be considered for deletion
     """
-    tweet_date = datetime.strptime(tweet["created_at"], "%a %b %d %X %z %Y")
+    logger = logging.getLogger(__name__)
+
+    try:
+        tweet_date = datetime.strptime(
+            tweet["tweet"]["created_at"], "%a %b %d %X %z %Y"
+        )
+    except KeyError:
+        print(tweet)
+        logger.warning("Tweet %s has no 'created_at' field", tweet["tweet"]["id"])
+        return False
     if tweet_date >= date:
         return True
     return False
@@ -66,8 +81,20 @@ def date_before(tweet: dict, date: datetime):
 
     :param tweet:  JSON dict for tweet
     :param date:  if the tweet was posted before this date it should be considered for deletion
+
+    Expected date format: "%a %b %d %X %z %Y"
+
+    e.g. Mon Jul 02 00:00:00 +0000 2019
     """
-    tweet_date = datetime.strptime(tweet["created_at"], "%a %b %d %X %z %Y")
+    logger = logging.getLogger(__name__)
+
+    try:
+        tweet_date = datetime.strptime(
+            tweet["tweet"]["created_at"], "%a %b %d %X %z %Y"
+        )
+    except KeyError:
+        logger.warning("Tweet %s has no 'created_at' field", tweet["tweet"]["id"])
+        return False
     if tweet_date <= date:
         return True
     return False
@@ -79,9 +106,9 @@ def is_retweet(tweet: dict):
     :param tweet:  JSON dict for tweet
     """
     try:
-        text = tweet["full_text"]
+        text = tweet["tweet"]["full_text"]
     except KeyError:
-        text = tweet["text"]
+        text = tweet["tweet"]["text"]
     if text.startswith("RT @"):
         return True
     return False
@@ -92,6 +119,6 @@ def is_reply(tweet: dict):
 
     :param tweet:  JSON dict for tweet
     """
-    if tweet["in_reply_to_screen_name"]:
+    if tweet["tweet"]["in_reply_to_screen_name"]:
         return True
     return False
