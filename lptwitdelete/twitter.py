@@ -34,7 +34,8 @@ def delete_tweets(api: tweepy.API, tweets: List):
 
     if len(skipped):
         logger.warning(
-            "Skipped tweets:\n\t%s", "\n\t".join([_["id_str"] for _ in skipped])
+            "Skipped tweets:\n\t%s",
+            "\n\t".join([_["tweet"]["id_str"] for _ in skipped]),
         )
 
 
