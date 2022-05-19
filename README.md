@@ -68,7 +68,7 @@ The `lptwitdelete` program can be run using the name `lptwitdelete`, or the abbr
 Issue the following command at the terminal:
 
 ```bash
-lptd -v --delete -o deleted.json
+lptd -v --delete -o deleted.json <YOUR_USERNAME>
 ```
 
 So long as the authentication details are correct, `lptd` will do the following:
@@ -86,7 +86,7 @@ If you have a local archive of your Twitter history (see below) you can use this
 Issuing the command at the terminal:
 
 ```bash
-lptd -v --delete -a tweets.js -o deleted.json --start_date 2020-01-01 --end_date 2020-02-18
+lptd -v --delete -a tweets.js -o deleted.json --start_date 2020-01-01 --end_date 2020-02-18 <YOUR_USERNAME>
 ```
 
 If authenticated, the command will delete from your timeline all tweets between 1st January 2020 and 18th February 2020, inclusive. The script does the following:
@@ -118,7 +118,7 @@ lptd -v -o deleted.json <YOUR_USERNAME>
 downloads your recent Twitter history to the file `deleted.json`. No tweets are deleted.
 
 ```bash
-lptd -v -a tweets.js -o deleted.json --start_date 2020-01-01 --end_date 2020-02-18
+lptd -v -a tweets.js -o deleted.json --start_date 2020-01-01 --end_date 2020-02-18 <YOUR_USERNAME>
 ```
 
 extracts the tweets from 1st January 2020 to 18th February 2020 inclusive to the file `deleted.json`. No tweets are deleted.
