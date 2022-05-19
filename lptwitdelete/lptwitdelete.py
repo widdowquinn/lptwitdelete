@@ -34,7 +34,7 @@ def main(argv: Optional[List[str]] = None):
         api = None
     else:
         keys = Config(args.username, args.confpath)
-        api = oauth_login(keys.CONSUMER_KEY, keys.CONSUMER_SECRET)
+        api = oauth_login(keys.CONSUMER_KEY, keys.CONSUMER_SECRET, keys.ACCESS_KEY, keys.ACCESS_SECRET)
         logger.info("Authenticated with Twitter as %s", api.verify_credentials().screen_name)
 
     # If archive file is supplied, load tweets into memory; any filtering on command-line
