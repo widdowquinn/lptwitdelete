@@ -8,7 +8,7 @@
     - [API keys](#api-keys)
   - [Documentation](#documentation)
   - [Quick Start](#quick-start)
-    - [Delete most recent 3200 statuses using the Twitter API](#delete-most-recent-3200-statuses-using-the-twitter-api)
+    - [Delete the most recent 3200 statuses using the Twitter API](#delete-the-most-recent-3200-statuses-using-the-twitter-api)
     - [Delete statuses between two dates, using a downloaded archive](#delete-statuses-between-two-dates-using-a-downloaded-archive)
     - [Acquiring your complete Twitter archive](#acquiring-your-complete-twitter-archive)
     - [Dry runs](#dry-runs)
@@ -35,7 +35,7 @@ This will install the `lptwitdelete` package for Python, and the script `lptwitd
 
 ### API keys
 
-API keys are required to interact with Twitter. You should obtain these for yourself from [https://developer.twitter.com](https://developer.twitter.com). By default, `lptd` will look for these keys in the file `~/twitter/lptwitdelete/conf.yml`, and expects the following information in YAML format:
+API keys are required to interact with Twitter. You should obtain these for yourself from [https://developer.twitter.com](https://developer.twitter.com). By default, `lptd` will look for these keys in the file `~/.twitter/lptwitdelete/conf.yml`, and expects the following information in YAML format:
 
 ```yaml
 lptwitdelete:
@@ -63,22 +63,15 @@ A brief summary of usage is provided below, in the Quick Start
 
 The `lptwitdelete` program can be run using the name `lptwitdelete`, or the abbreviation `lptd`. For brevity, this `README.md` uses the `lptd` abbreviation.
 
-### Delete most recent 3200 statuses using the Twitter API
+### Delete the most recent 3200 statuses using the Twitter API
 
 Issue the following command at the terminal:
 
 ```bash
-lptd -v --delete -o deleted.json <YOUR_USERNAME>
+lptd -v --delete -o deleted.json
 ```
 
-This will open your browser to authenticate you with Twitter (if necessary), and authorise the application to modify your account. Twitter will provide an authentication code in your browser, and this should be entered at the prompt as below:
-
-```bash
-$ lptd -o downloaded_test.json widdowquinn
-Please enter the verification code from your browser > 5049179
-```
-
-Once the authentication code is provided, `lptd` will do the following:
+So long as the authentication details are correct, `lptd` will do the following:
 
 1. acquire your recent Twitter stream (up to the most recent ≈3200 status updates) using the online API
 2. write these tweets to the file `deleted.json` in machine-readable [`JSON` format](https://en.wikipedia.org/wiki/JSON)
@@ -93,16 +86,15 @@ If you have a local archive of your Twitter history (see below) you can use this
 Issuing the command at the terminal:
 
 ```bash
-lptd -v --delete -a tweets.js -o deleted.json --start_date 2020-01-01 --end_date 2020-02-18 <YOUR_USERNAME>
+lptd -v --delete -a tweets.js -o deleted.json --start_date 2020-01-01 --end_date 2020-02-18
 ```
 
-again opens the browser to authenticate with Twitter (if necessary), and authorise the application to modify your account. Once authenticated, the command will delete from your timeline all tweets between 1st January 2020 and 18th February 2020, inclusive. The script does the following:
+If authenticated, the command will delete from your timeline all tweets between 1st January 2020 and 18th February 2020, inclusive. The script does the following:
 
 1. reads in your local Twitter archive (in `JSON` format) from `tweets.js`
 2. filters the statuses from the archive, retaining only those that were created on or after 1st January 2020, up to and including 18th February 2020
 3. writes the retained tweets to the file `deleted.json`, in `JSON` format
 4. attempts to delete each of the statuses from step (2) from Twitter
-
 
 ### Acquiring your complete Twitter archive
 
@@ -126,7 +118,7 @@ lptd -v -o deleted.json <YOUR_USERNAME>
 downloads your recent Twitter history to the file `deleted.json`. No tweets are deleted.
 
 ```bash
-lptd -v -a tweets.js -o deleted.json --start_date 2020-01-01 --end_date 2020-02-18 <YOUR_USERNAME>
+lptd -v -a tweets.js -o deleted.json --start_date 2020-01-01 --end_date 2020-02-18
 ```
 
 extracts the tweets from 1st January 2020 to 18th February 2020 inclusive to the file `deleted.json`. No tweets are deleted.
@@ -140,7 +132,7 @@ Unless otherwise indicated, all code is subject to the following agreement:
 ```text
 The MIT License
 
-Copyright (c) 2020-2021 Leighton Pritchard
+Copyright (c) 2020-2022 Leighton Pritchard
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
