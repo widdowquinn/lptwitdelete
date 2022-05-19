@@ -29,7 +29,7 @@ def delete_tweets(api: tweepy.API, tweets: List):
         try:
             delete_tqdm.set_description(tweet["tweet"]["id_str"])
             api.destroy_status(tweet["tweet"]["id_str"])
-        except tweepy.TweepError:
+        except tweepy.errors.TweepyException:
             skipped.append(tweet)
 
     if len(skipped):
@@ -56,7 +56,9 @@ def filter_twitter(api: tweepy.API, args: Namespace):
     return filter_tweets(tweets, args)
 
 
-def oauth_login(consumer_key: str, consumer_secret: str):
+def oauth_login(
+    consumer_key: str, consumer_secret: str, access_token: str, access_token_secret: str
+):
     """Authenticate with Twitter via OAuth.
 
     :param consumer_key:  the consumer API key
@@ -66,19 +68,8 @@ def oauth_login(consumer_key: str, consumer_secret: str):
     logger.info("Authenticating to Twitter via OAuth")
 
     # Authenticate
-    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-    try:
-        auth_url = auth.get_authorization_url()
-    except tweepy.TweepError:
-        logger.error("Failed to get request token (exiting)")
-        raise SystemError(1)
-
-    # Open webbrowser to authentication URL and get user code
-    logger.info("Opening authentication URL %s in new browser tab", auth_url)
-    webbrowser.open_new_tab(auth_url)
-    verification_code = input("Please enter the verification code from your browser > ")
-
-    # Verify access token
-    auth.get_access_token(verification_code)
+    auth = tweepy.OAuth1UserHandler(
+        consumer_key, consumer_secret, access_token, access_token_secret
+    )
 
     return tweepy.API(auth)
