@@ -2,7 +2,6 @@
 """Provides access to Twitter API."""
 
 import logging
-import webbrowser
 
 from argparse import Namespace
 from typing import List
