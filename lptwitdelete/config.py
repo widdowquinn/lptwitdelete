@@ -25,7 +25,7 @@ class Config:
                 confdata = yaml.safe_load(ifh)
                 self.CONSUMER_KEY = confdata["lptwitdelete"]["api_key"]
                 self.CONSUMER_SECRET = confdata["lptwitdelete"]["api_secret_key"]
-                self.CCESS_KEY = confdata["lptwitdelete"]["access_token"]
+                self.ACCESS_KEY = confdata["lptwitdelete"]["access_token"]
                 self.ACCESS_SECRET = confdata["lptwitdelete"]["access_token_secret"]
                 self.USERNAME = username
             except yaml.YAMLError:
