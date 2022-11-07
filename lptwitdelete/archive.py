@@ -19,8 +19,9 @@ def load_filter_archive(args: Namespace) -> List[dict]:
     with args.archpath.open("r") as ifh:
         # The tweet.js file starts with non-standard text (window.YTD.tweet.part0 = )
         # that the JSON parser cannot handle, so we need to strip this before parsing
-        if ifh.readline().startswith("window.YTD.tweet.part0"):
-            ifh.seek(25, 0)
+        firstline = ifh.readline()
+        if firstline.startswith("window.YTD.tweets.part0"):
+            ifh.seek(26, 0)
         else:
             ifh.seek(0, 0)
         tweets = json.load(ifh)
