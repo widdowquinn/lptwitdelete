@@ -7,7 +7,7 @@ import logging
 from argparse import Namespace
 from typing import List
 
-from lptwitdelete.filters import filter_tweets
+from lptwitdelete.filters import filter_tweets, filter_dms
 
 
 def load_filter_archive(args: Namespace) -> List[dict]:
@@ -22,9 +22,15 @@ def load_filter_archive(args: Namespace) -> List[dict]:
         firstline = ifh.readline()
         if firstline.startswith("window.YTD.tweets.part0"):
             ifh.seek(26, 0)
+        elif firstline.startswith("window.YTD.direct_messages.part0"):
+            ifh.seek(35, 0)
         else:
             ifh.seek(0, 0)
         tweets = json.load(ifh)
         logger.debug("Loaded %s tweets", len(tweets))
 
-    return filter_tweets(list(tweets), args)
+    if "dmConversation" in tweets[0]:
+        logger.info("Archive is a direct message archive, not a tweet archive")
+        return filter_dms(list(tweets), args)
+    else:
+        return filter_tweets(list(tweets), args)

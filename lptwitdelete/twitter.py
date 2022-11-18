@@ -26,8 +26,15 @@ def delete_tweets(api: tweepy.API, tweets: List):
     skipped = []
     for tweet in delete_tqdm:
         try:
-            delete_tqdm.set_description(tweet["tweet"]["id_str"])
-            api.destroy_status(tweet["tweet"]["id_str"])
+            if "tweet" in tweet:
+                delete_tqdm.set_description(tweet["tweet"]["id_str"])
+                api.destroy_status(tweet["tweet"]["id_str"])
+            elif "messageCreate" in tweet:
+                delete_tqdm.set_description(tweet["messageCreate"]["id"])
+                api.destroy_status(tweet["messageCreate"]["id"])
+            elif "welcomeMessageCreate" in tweet:
+                delete_tqdm.set_description(tweet["welcomeMessageCreate"]["id"])
+                api.destroy_status(tweet["welcomeMessageCreate"]["id"])
         except tweepy.errors.TweepyException:
             skipped.append(tweet)
 
