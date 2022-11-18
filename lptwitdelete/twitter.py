@@ -31,18 +31,19 @@ def delete_tweets(api: tweepy.API, tweets: List):
                 api.destroy_status(tweet["tweet"]["id_str"])
             elif "messageCreate" in tweet:
                 delete_tqdm.set_description(tweet["messageCreate"]["id"])
-                api.destroy_status(tweet["messageCreate"]["id"])
+                api.delete_direct_message(tweet["messageCreate"]["id"])
             elif "welcomeMessageCreate" in tweet:
                 delete_tqdm.set_description(tweet["welcomeMessageCreate"]["id"])
-                api.destroy_status(tweet["welcomeMessageCreate"]["id"])
+                api.delete_direct_message(tweet["welcomeMessageCreate"]["id"])
         except tweepy.errors.TweepyException:
             skipped.append(tweet)
 
     if len(skipped):
-        logger.warning(
-            "Skipped tweets:\n\t%s",
-            "\n\t".join([_["tweet"]["id_str"] for _ in skipped]),
-        )
+        logger.warning("Skipped %d tweets", len(skipped))
+        # logger.warning(
+        #     "Skipped tweets:\n\t%s",
+        #     "\n\t".join([_["tweet"]["id_str"] for _ in skipped]),
+        # )
 
 
 def filter_twitter(api: tweepy.API, args: Namespace):
